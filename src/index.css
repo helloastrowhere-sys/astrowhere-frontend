@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Atrix Color Palette */
+  --bg-primary: #111827;
+  /* Dark navy */
+  --bg-gradient: radial-gradient(circle at center, #1e293b 0%, #111827 100%);
+  --bg-card: #283547;
+  /* Slate inner card */
+  --bg-card-hover: #334155;
+  --accent-main: #4CAF50;
+  /* Stock Market Green */
+  --accent-active: #43A047;
+  --text-main: #F2EBE6;
+  /* Off-white / Cream */
+  --text-muted: #9ca3af;
+  /* Slate-400 */
+  --border-light: rgba(255, 255, 255, 0.08);
+
+  --font-serif: 'Crimson Pro', serif;
+  --font-sans: 'Open Sans', -apple-system, sans-serif;
+
+  --app-max-width: 480px;
+}
+
+/* Base Mobile-App Resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+input,
+textarea {
+  user-select: auto;
+}
+
+/* Hide scrollbars on wheel picker */
+.wheel-scroll-container {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE */
+}
+
+.wheel-scroll-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
+}
+
+/* ─── Astroline Wheel Picker ─── */
+.wheel-picker-wrapper {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.wheel-picker-inner {
+  position: relative;
+  display: flex;
+}
+
+/* Selection band – the two lines marking the selected row */
+.wheel-selection-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Top fade gradient */
+.wheel-fade-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, var(--bg-primary) 10%, transparent 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Bottom fade gradient */
+.wheel-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, var(--bg-primary) 10%, transparent 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Individual column */
+.wheel-column {
+  flex: 1;
+}
+
+/* Each item cell */
+.wheel-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-sans);
+  letter-spacing: 0.3px;
+  transition: opacity 0.12s ease, font-size 0.12s ease, font-weight 0s;
+  color: var(--text-main);
+}
+
+.wheel-item--selected {
+  opacity: 1;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.wheel-item--near {
+  opacity: 0.35;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.wheel-item--far {
+  opacity: 0.12;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+/* Header label item inside the scroll (Ay, Gün, Yıl) */
+.wheel-item--header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Location Dropdown */
+.location-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  background-color: var(--pill-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.location-suggestion {
+  padding: 14px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.location-suggestion:last-child {
+  border-bottom: none;
+}
+
+.location-suggestion:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.location-suggestion:active {
+  background-color: var(--accent-main);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-primary);
+  /* Fallback */
+}
+
+/* The "Mobile Phone" Container */
+.app-container {
+  width: 100%;
+  height: 100%;
+  max-width: var(--app-max-width);
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: var(--bg-gradient);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Area */
+.app-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  position: relative;
+  z-index: 20;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: -8px;
+}
+
+.logo-center {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  width: 20px;
+  height: 20px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent-main);
+  font-size: 12px;
+  color: var(--accent-main);
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+}
+
+/* Top Progress Bar */
+.progress-container {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-main);
+  transition: width 0.4s ease;
+}
+
+/* Main Content Area */
+.step-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px 24px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.step-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+.step-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+/* Interactive Elements */
+/* Element Cards (Step 8) */
+.element-card {
+  background: var(--bg-card);
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  aspect-ratio: 1;
+}
+
+.element-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.element-card:active {
+  transform: scale(0.96);
+}
+
+.element-card.selected {
+  border-color: var(--accent-main);
+  background: rgba(86, 113, 255, 0.12);
+  box-shadow: 0 0 20px rgba(86, 113, 255, 0.2);
+}
+
+.element-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.element-card.selected .element-icon-circle {
+  background: linear-gradient(135deg, rgba(86, 113, 255, 0.25), rgba(86, 113, 255, 0.1));
+}
+
+.element-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.element-label {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  color: var(--text-main);
+}
+
+/* Bottom Actions */
+.bottom-actions {
+  padding: 16px 24px 24px;
+  background: linear-gradient(to top, var(--bg-primary) 50%, transparent);
+  position: relative;
+  z-index: 10;
+}
+
+.btn-continue {
+  background: var(--accent-main);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  height: 56px;
+  width: 100%;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 14px rgba(10, 21, 26, 0.3);
+}
+
+.btn-continue:active:not(:disabled) {
+  transform: scale(0.98);
+  background: var(--accent-active);
+}
+
+.btn-continue:disabled {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Inputs */
+.text-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  height: 56px;
+  padding: 0 20px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.text-input:focus {
+  border-color: var(--accent-main);
+}
+
+.text-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Relationship Cards */
+.relationship-card {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.relationship-card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.relationship-card.selected {
+  background-color: rgba(86, 113, 255, 0.15);
+  border-color: var(--accent-main);
+}
+
+.relationship-emoji {
+  font-size: 28px;
+  margin-right: 20px;
+}
+
+.relationship-label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* Animations */
+.slide-in-right {
+  animation: slideInR 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideInR {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 481px) {
+  .app-container {
+    height: 90vh;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+}
